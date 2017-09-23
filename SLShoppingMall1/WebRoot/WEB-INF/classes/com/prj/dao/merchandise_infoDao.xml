@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.prj.dao.merchandise_infoDao">
+	<insert id="create" parameterType="merchandise_info">
+		INSERT INTO merchandise_info(mcode,mname,marketPrice,sellPrice,inventory,
+		 		mdeadline,specification,explain) 
+		VALUES (#{mcode},#{mname},#{marketPrice},#{sellPrice},#{inventory},
+				#{mdeadline},#{specification},#{explain}) 
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		DELETE FROM merchandise_info WHERE mid = #{id};
+	</delete>
+	
+	<update id="update" parameterType="merchandise_info">
+		UPDATE merchandise_info SET mcode=#{mcode},mname=#{mname},marketPrice=#{marketPrice},
+				sellPrice=#{sellPrice},inventory=#{inventory},mdeadline=#{mdeadline},
+				specification=#{specification},mexplain=#{mexplain}
+		WHERE mid = #{mid}
+	</update>
+	
+	<select id="retrieveById" parameterType="int" resultType="merchandise_info">
+		SELECT *
+		FROM merchandise_info
+		WHERE cid=#{id}
+	</select>
+	
+	<select id="retrieveAll" resultType="merchandise_info">
+		SELECT mid,mname,marketPrice,sellPrice,inventory,mdeadline
+		FROM merchandise_info
+		<!-- <trim prefix="where" prefixOverrides="and|or">
+			<if test="mcode!=null">
+					and mcode='%#{mcode}%'
+			</if>
+			<if test="mname!=null">
+					and mname='%#{mname}%'
+			</if>
+			<if test="mdeadline!=null">
+					and mdeadline='%#{mdeadline}%'
+			</if>
+		</trim> -->
+		limit #{page},#{rows}
+		
+	</select>
+	
+	<select id="count" resultType="int">
+		select count(*)
+		from merchandise_info
+	</select>
+	
+	
+
+</mapper>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.prj.dao.ht_roleDao">
+	<insert id="create" parameterType="ht_role">
+		INSERT INTO ht_role(role,rcode,rdeadline) VALUES(#{role},#{rcode},#{rdeadline})
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		DELETE FROM ht_role WHERE rid = #{id};
+	</delete>
+	
+	<update id="update" parameterType="ht_role">
+		UPDATE ht_role SET role=#{role},rcode=#{rcode},rdeadline=#{rdeadline}
+		WHERE rid = #{rid}
+	</update>
+	
+	<select id="retrieveById" parameterType="int" resultType="ht_role">
+		SELECT rid,role,rcode,rdeadline
+		FROM ht_role
+		WHERE rid=#{id}
+	</select>
+	
+	<resultMap type="ht_role" id="role">
+		<id column="rid" property="rid"/>
+		<result column="role" property="role"/>
+		<result column="rcode" property="rcode"/>
+		<result column="rdeadline" property="rdeadline"/>
+		<result column="sid" property="sid"/>
+		
+		<association property="st" javaType="ht_status">
+			<result column="status" property="status"/>
+		</association>
+	</resultMap>
+	
+	<select id="retrieveAll" resultMap="role">
+		SELECT r.rid,r.rcode,r.rdeadline,r.role,s.status
+		FROM ht_role r,ht_status s
+		WHERE r.sid=s.sid
+	</select>
+	
+	
+	
+
+</mapper>

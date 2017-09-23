@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.prj.dao.ht_usersDao">
+	<insert id="create" parameterType="ht_users">
+		INSERT INTO ht_users(nickname,truename,tid,cardtypeid,tel,email,
+							 zipcode,address,uimage,rid,sid,cardcode,utime)
+		VALUES(#{nickname},#{truename},#{tid},#{cardtypeid},#{tel},
+			   #{email},#{zipcode},#{address},#{uimage},#{rid},#{sid},
+			   #{cardcode},#{utime})
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		DELETE FROM ht_users WHERE uid = #{id};
+	</delete>
+	
+	<update id="update" parameterType="ht_users">
+		UPDATE ht_users SET nickname=#{nickname},truename=#{truename},
+			tid=#{tid},cardtypeid=#{cardtypeid},tel=#{tel},email=#{email},
+			zipcode=#{zipcode},address=#{address},uimage=#{uimage},rid=#{rid},
+			cardcode=#{cardcode},utime=#{utime}
+		WHERE uid = #{uid}
+	</update>
+	
+	<select id="retrieveById" parameterType="int" resultType="ht_users">
+		SELECT uid,nickname,truename,tid,cardtypeid,tel,email,zipcode,address,
+			   uimage,rid,sid,cardcode,utime
+		FROM ht_users
+		WHERE uid=#{id}
+	</select>
+	
+	<resultMap type="ht_users" id="users">
+		<id column="uid" property="uid"/>
+		<result column="nickname" property="nickname"/>
+		<result column="uimage" property="uimage"/>
+		<result column="utime" property="utime"/>
+		
+		<association property="role" javaType="ht_role">
+			<result column="role" property="role"/>
+		</association>
+		
+		<association property="type" javaType="ht_userstype">
+			
+			<result column="type" property="type"/>
+		</association>
+		
+		<association property="status" javaType="ht_status">
+			<result column="status" property="status"/>
+		</association>
+	</resultMap>
+	
+	<select id="retrieveLimit" resultMap="users">
+		SELECT u.uid,u.nickname,u.uimage,u.utime,r.role,t.type,s.status
+		FROM ht_users u,ht_userstype t,ht_status s,ht_role r
+		WHERE u.tid=t.tid 
+		AND u.sid =s.sid 
+		AND u.rid = r.rid
+	</select>
+	
+	<select id="count" resultType="int">
+		select count(*)
+		from ht_users
+	</select>
+
+</mapper>
